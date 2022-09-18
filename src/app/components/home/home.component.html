@@ -1,0 +1,92 @@
+<div class="Header" nz-row>
+  <div nz-col><img class="logo" src="./../../../assets/logo.gif" /></div>
+  <div nz-col><h1>Copy & Paste</h1></div>
+</div>
+<div class="editorContainer" nz-row>
+  <div class="textEditor" nz-col nzXs="24" nzSm="24" nzLg="15" nzXl="15">
+    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+    <ngx-editor
+      class="editorText"
+      [editor]="editor"
+      [ngModel]="html"
+      [disabled]="false"
+      [placeholder]="'Type here...'"
+    ></ngx-editor>
+    <button nz-button class="nzButtons" (click)="saveText()" nzType="default">
+      <img src="./../../../assets/save.gif" class="saveImg" />
+      <span>Save</span>
+    </button>
+  </div>
+  <div class="publicPastes" nz-col nzXs="24" nzSm="24" nzLg="8" nzXl="8">
+    public pastes
+  </div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  nzTitle="Save your paste"
+  (nzOnCancel)="isModalVisible = false"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="saveForm" (ngSubmit)="handleOk()">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Title</nz-form-label>
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Please enter a title"
+        >
+          <input
+            nz-input
+            formControlName="title"
+            id="title"
+            placeholder="Add a title for your paste"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24">Password</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            formControlName="password"
+            id="password"
+            placeholder="Make your paste password protected"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired
+          >Expires in</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-select
+            nzShowSearch
+            nzAllowClear
+            formControlName="expire"
+            [(ngModel)]="selectedTime"
+            (ngModelChange)="onTimeChange($event)"
+          >
+            <nz-option
+              *ngFor="let time of expirationDates"
+              nzLabel="{{ time }}"
+              nzValue="{{ time }}"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <button
+        nz-button
+        class="generateButton"
+        (click)="saveText()"
+        nzType="default"
+        type="submit"
+      >
+        <img src="./../../../assets/generate.gif" class="generateImg" />
+        <span>Generate Link</span>
+      </button>
+    </form>
+  </ng-container>
+</nz-modal>
